@@ -9,6 +9,7 @@ namespace Iterator
     {
       list = new List<T>();
     }
+    public int Count { get { return list.Count; } }
     public void Add(T item)
     {
       list.Add(item);
