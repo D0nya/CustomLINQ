@@ -1,25 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Iterator
 {
   class Program
   {
-    static void Main(string[] args)
+    static void Main()
     {
       CustomList<string> films = new CustomList<string>();
-      films.AddRange(new string [] { "Fear and Loathing in Las Vegas", "Fight Club", "Filth", "Trainspotting", "A Clockwork Orange",
+      films.AddRange(new string[] { "Fear and Loathing in Las Vegas", "Fight Club", "Filth", "Trainspotting", "A Clockwork Orange",
                                      "RocknRolla", "Revolver" , "Three Billboards Outside Ebbing, Missouri",
-                                      "Pulp Fiction", "Dazed and Confused", "Lock, Stock and Two Smoking Barrels"});
+                                     "Pulp Fiction", "Dazed and Confused", "Lock, Stock and Two Smoking Barrels"});
 
-      var res = films.Where(film => film.Contains(" ")).Map(film => film.ToUpper());
+      IIteratable<string> res = films.Where(film => film.Contains(" ")).Map(film => film.ToUpper());
       foreach (var item in res)
       {
         Console.WriteLine(item);
       }
       Console.WriteLine();
 
-      var count = films.Where(film => film.StartsWith("F")).Count();
-      Console.WriteLine("Films that start with 'F': {0}", count);
+      var startWithF = films.Where(film => film.StartsWith("F"));
+      Console.WriteLine("Films that start with 'F': {0}", startWithF.Count());
+      films.Add("Fargo");
+      Console.WriteLine("Films that start with 'F': {0}", startWithF.Count());
       Console.WriteLine();
 
       CustomList<string> moreFilms = new CustomList<string>();
@@ -30,13 +34,6 @@ namespace Iterator
 
       var filmsArray = concat.ToArray();
       Console.WriteLine(filmsArray.GetType());
-
-      var orderByLength = concat.OrderBy(film => film.Length).ToArray();
-      var namesLength = concat.Select(film => film.Length).OrderBy(l=>l).ToArray();
-      for(int i = 0; i < orderByLength.Length; i++)
-      {
-        Console.WriteLine(namesLength[i] + ": " + orderByLength[i] );
-      }
     }
   }
 }
