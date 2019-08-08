@@ -5,7 +5,7 @@ namespace Iterator
 {
   public class CustomList<T> : IIteratable<T>, IEnumerator<T>
   {
-    private List<T> list;
+    private readonly List<T> list;
     private T current;
     private int state = 0;
     private int i;
@@ -23,30 +23,14 @@ namespace Iterator
       get { return list[index]; }
       set { list[index] = value; }
     }
-    public void AddRange(IEnumerable<T> array)
+    public IEnumerator<T> GetEnumerator()
     {
-      foreach (T item in array)
-      {
-        list.Add(item);
-      }
+      return this;
     }
     public List<T> GetItems()
     {
       return list;
     }
-    public void Add(T item)
-    {
-      list.Add(item);
-    }
-    public void Clear()
-    {
-      list.Clear();
-    }
-    public IEnumerator<T> GetEnumerator()
-    {
-      return this;
-    }
-
     public bool MoveNext()
     {
       switch(state)
@@ -70,15 +54,23 @@ namespace Iterator
       }
       return false;
     }
-
+    public void AddRange(IEnumerable<T> array)
+    {
+      list.AddRange(array);
+    }
+    public void Add(T item)
+    {
+      list.Add(item);
+    }
+    public void Clear()
+    {
+      list.Clear();
+    }
     public void Reset()
     {
       state = 0;
       i = 0;
-      current = list[i];
     }
-    public void Dispose()
-    {
-    }
+    public void Dispose(){}
   }
 }

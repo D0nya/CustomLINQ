@@ -6,17 +6,24 @@ namespace Iterator
 {
   public class WhereEnumerable<TSource> : IIteratable<TSource>, IEnumerator<TSource>
   {
-    private IIteratable<TSource> source;
-    private Func<TSource, bool> func;
+    private readonly IIteratable<TSource> source;
+    private readonly Func<TSource, bool> func;
     private TSource current;
+    private bool moveNext = false;
     private int state = 0;
-    bool moveNext = false;
     public WhereEnumerable(IIteratable<TSource> source, Func<TSource, bool> func)
     {
       this.source = source;
       this.func = func;
     }
 
+    public TSource Current { get { return current; } }
+    object IEnumerator.Current { get{ return Current; } }
+
+    public IEnumerator<TSource> GetEnumerator()
+    {
+      return this;
+    }
     public bool MoveNext()
     {
       switch (state)
@@ -40,16 +47,10 @@ namespace Iterator
       }
       return false;
     }
-
-    public IEnumerator<TSource> GetEnumerator()
+    public void Dispose(){}
+    public void Reset()
     {
-      return this;
+      source.GetEnumerator().Reset();
     }
-    public void Dispose()
-    {
-    }
-    public void Reset(){ source.GetEnumerator().Reset(); }
-    public TSource Current { get { return current; } }
-    object IEnumerator.Current { get{ return Current; } }
   }
 }

@@ -4,13 +4,14 @@ using System.Collections.Generic;
 
 namespace Iterator
 {
-  internal class SelectEnumerable<TSource, TRetrun>: IIteratable<TRetrun>, IEnumerator<TRetrun>
+  public class SelectEnumerable<TSource, TRetrun>: IIteratable<TRetrun>, IEnumerator<TRetrun>
   {
-    private IIteratable<TSource> source;
-    private Func<TSource, TRetrun> selector;
+    private readonly IIteratable<TSource> source;
+    private readonly Func<TSource, TRetrun> selector;
     private TRetrun current;
+    private bool moveNext = false;
     private int state = 0;
-    bool moveNext = false;
+
     public SelectEnumerable(IIteratable<TSource> source, Func<TSource, TRetrun> selector)
     {
       this.source = source;
@@ -20,6 +21,10 @@ namespace Iterator
     public TRetrun Current { get { return current; } }
     object IEnumerator.Current { get { return Current; } }
 
+    public IEnumerator<TRetrun> GetEnumerator()
+    {
+      return this;
+    }
     public bool MoveNext()
     {
       switch (state)
@@ -41,18 +46,11 @@ namespace Iterator
       }
       return false;
     }
-
     public void Reset()
     {
       source.GetEnumerator().Reset();
 
     }
-    public IEnumerator<TRetrun> GetEnumerator()
-    {
-      return this;
-    }
-    public void Dispose()
-    {
-    }
+    public void Dispose(){}
   }
 }

@@ -6,17 +6,25 @@ namespace Iterator
 {
   public class MapEnumerable<TSource> : IIteratable<TSource>, IEnumerator<TSource>
   {
-    private IIteratable<TSource> source;
-    private Func<TSource, TSource> func;
+    private readonly IIteratable<TSource>  source;
+    private readonly Func<TSource, TSource> func;
     private TSource current;
-    private int state = 0;
     private bool moveNext = true;
+    private int state = 0;
+
     public MapEnumerable(IIteratable<TSource> source, Func<TSource, TSource> func)
     {
       this.source = source;
       this.func = func;
     }
 
+    public TSource Current { get { return current; } }
+    object IEnumerator.Current { get { return Current; } }
+
+    public IEnumerator<TSource> GetEnumerator()
+    {
+      return this;
+    }
     public bool MoveNext()
     {
       switch (state)
@@ -39,16 +47,10 @@ namespace Iterator
       }
       return false;
     }
-
-    public IEnumerator<TSource> GetEnumerator()
+    public void Dispose(){}
+    public void Reset()
     {
-      return this;
+      source.GetEnumerator().Reset();
     }
-    public void Dispose()
-    {
-    }
-    public void Reset() { source.GetEnumerator().Reset(); }
-    public TSource Current { get { return current; } }
-    object IEnumerator.Current { get { return Current; } }
   }
 }

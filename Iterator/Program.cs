@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Iterator
 {
@@ -13,7 +11,7 @@ namespace Iterator
                                      "RocknRolla", "Revolver" , "Three Billboards Outside Ebbing, Missouri",
                                      "Pulp Fiction", "Dazed and Confused", "Lock, Stock and Two Smoking Barrels"});
 
-      IIteratable<string> res = films.Where(film => film.Contains(" ")).Map(film => film.ToUpper());
+      var res = films.Where(film => film.Contains(" ")).Map(film => film.ToUpper());
       foreach (var item in res)
       {
         Console.WriteLine(item);

@@ -122,6 +122,7 @@ namespace Iterator.Tests
 
       Assert.True(res);
     }
+
     [Fact]
     public void Some_IIteratableOfStringsContains000_ReturnFalse()
     {

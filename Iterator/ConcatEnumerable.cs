@@ -5,11 +5,11 @@ namespace Iterator
 {
   public class ConcatEnumerable<TSource> : IIteratable<TSource>, IEnumerator<TSource>
   {
-    private IIteratable<TSource>[] iteratables;
+    private readonly IIteratable<TSource>[] iteratables;
     private TSource current;
     private int state = 0;
     private int currentIteratable = 0;
-    bool moveNext = false;
+    private bool moveNext = false;
 
     public ConcatEnumerable(IIteratable<TSource> first, IIteratable<TSource> second)
     {
@@ -17,10 +17,14 @@ namespace Iterator
       iteratables[0] = first;
       iteratables[1] = second;
     }
-    public TSource Current { get{ return current; } }
 
+    public TSource Current { get{ return current; } }
     object IEnumerator.Current { get { return Current; } }
 
+    public IEnumerator<TSource> GetEnumerator()
+    {
+      return this;
+    }
     public bool MoveNext()
     {
       switch (state)
@@ -47,16 +51,7 @@ namespace Iterator
       }
       return false;
     }
-
-    public void Dispose()
-    {
-    }
-
-    public IEnumerator<TSource> GetEnumerator()
-    {
-      return this;
-    }
-
+    public void Dispose(){}
     public void Reset()
     {
       iteratables[0].GetEnumerator().Reset();
